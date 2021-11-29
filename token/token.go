@@ -2,28 +2,31 @@ package token
 
 import (
 	"encoding/base64"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v4"
 	"time"
 )
 
 const HEADER = "Authorization"
-const JwtTokenType = "t"
-const JwtTokenUserType = "u"
-const JwtTokenAppid = "aid"
-const JwtTokenUid = "uid"
-const JwtTokenCreatetime = "ct"
-const JwtTokenExp = "exp"
+const JWT_TOKEN_TYPE = "t"
+const JWT_TOKEN_USER_TYPE = "u"
+const JWT_TOKEN_APPID = "aid"
+const JWT_TOKEN_UID = "uid"
+const JWT_TOKEN_CUSTOMERID = "cid"
+const JWT_TOKEN_CREATETIME = "ct"
+const JWT_TOKEN_EXP = "exp"
+
+
 
 func BuildAppToken(appId string, appSecret string, expireSecond int64) (string, error) {
 	second := time.Now().Unix() + expireSecond
 	cliams := jwt.MapClaims{}
-	cliams[JwtTokenType] = APP
-	cliams[JwtTokenAppid] = appId
-	cliams[JwtTokenExp] = second
+	cliams[JWT_TOKEN_TYPE] = APP
+	cliams[JWT_TOKEN_APPID] = appId
+	cliams[JWT_TOKEN_EXP] = second
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, cliams)
-	b, err := base64.StdEncoding.DecodeString(appSecret)
-	if err != nil {
-		return "", err
+	b, e := base64.StdEncoding.DecodeString(appSecret)
+	if e != nil {
+		return "", e
 	}
 	token, err := t.SignedString(b)
 	if err != nil {
@@ -32,20 +35,20 @@ func BuildAppToken(appId string, appSecret string, expireSecond int64) (string, 
 	return token, err
 }
 
-func BuildUserToken(appId string, appSecret string, expireSecond int64, uid string, userType UserType) (string, error) {
+func BuildUserToken(appId string, appSecret string, expireSecond int64, uid string,userType UserType) (string, error) {
 	now := time.Now().Unix()
 	second := now + expireSecond
 	cliams := jwt.MapClaims{}
-	cliams[JwtTokenType] = USER
-	cliams[JwtTokenAppid] = appId
-	cliams[JwtTokenUid] = uid
-	cliams[JwtTokenCreatetime] = now * 1000
-	cliams[JwtTokenUserType] = userType
-	cliams[JwtTokenExp] = second
+	cliams[JWT_TOKEN_TYPE] = USER
+	cliams[JWT_TOKEN_APPID] = appId
+	cliams[JWT_TOKEN_UID] = uid
+	cliams[JWT_TOKEN_CREATETIME] = now * 1000
+	cliams[JWT_TOKEN_USER_TYPE] = userType
+	cliams[JWT_TOKEN_EXP] = second
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, cliams)
-	b, err := base64.StdEncoding.DecodeString(appSecret)
-	if err != nil {
-		return "", err
+	b, e := base64.StdEncoding.DecodeString(appSecret)
+	if e != nil {
+		return "", e
 	}
 	token, err := t.SignedString(b)
 	if err != nil {

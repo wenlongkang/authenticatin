@@ -1,5 +1,5 @@
-module github.com/wenlongkang/authenticatin
+module authenticatin
 
 go 1.16
 
-require github.com/dgrijalva/jwt-go v3.2.0+incompatible
+require github.com/golang-jwt/jwt/v4 v4.0.0
