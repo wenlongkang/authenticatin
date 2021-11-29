@@ -1,4 +1,4 @@
-module authenticatin
+module github.com/wenlongkang/authenticatin
 
 go 1.16
 
