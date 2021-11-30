@@ -1,8 +1,8 @@
 package main
 
 import (
-	"authenticatin/token"
 	"fmt"
+	"github.com/wenlongkang/authenticatin/token"
 )
 
 func main() {

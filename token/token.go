@@ -15,8 +15,6 @@ const JWT_TOKEN_CUSTOMERID = "cid"
 const JWT_TOKEN_CREATETIME = "ct"
 const JWT_TOKEN_EXP = "exp"
 
-
-
 func BuildAppToken(appId string, appSecret string, expireSecond int64) (string, error) {
 	second := time.Now().Unix() + expireSecond
 	cliams := jwt.MapClaims{}
@@ -35,7 +33,7 @@ func BuildAppToken(appId string, appSecret string, expireSecond int64) (string, 
 	return token, err
 }
 
-func BuildUserToken(appId string, appSecret string, expireSecond int64, uid string,userType UserType) (string, error) {
+func BuildUserToken(appId string, appSecret string, expireSecond int64, uid string, userType UserType) (string, error) {
 	now := time.Now().Unix()
 	second := now + expireSecond
 	cliams := jwt.MapClaims{}
@@ -55,4 +53,19 @@ func BuildUserToken(appId string, appSecret string, expireSecond int64, uid stri
 		return "", err
 	}
 	return token, err
+}
+
+func ParseToken(token string, appSecret string) (jwt.Claims, error) {
+	bytes, e := base64.StdEncoding.DecodeString(appSecret)
+	if e != nil {
+		return nil, e
+	}
+	keyFunc := func(token *jwt.Token) (interface{}, error) {
+		return bytes, nil
+	}
+	t, e := jwt.Parse(token, keyFunc)
+	if e != nil {
+		return nil, e
+	}
+	return t.Claims, nil
 }
