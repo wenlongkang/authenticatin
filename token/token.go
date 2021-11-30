@@ -55,7 +55,7 @@ func BuildUserToken(appId string, appSecret string, expireSecond int64, uid stri
 	return token, err
 }
 
-func ParseToken(token string, appSecret string) (jwt.Claims, error) {
+func ParseToken(token string, appSecret string) (map[string]interface{}, error) {
 	bytes, e := base64.StdEncoding.DecodeString(appSecret)
 	if e != nil {
 		return nil, e
@@ -67,5 +67,5 @@ func ParseToken(token string, appSecret string) (jwt.Claims, error) {
 	if e != nil {
 		return nil, e
 	}
-	return t.Claims, nil
+	return t.Claims.(jwt.MapClaims), nil
 }

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/wenlongkang/authenticatin/token"
 )
 
@@ -16,12 +15,12 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(userToken)
-	claims, e := token.ParseToken(userToken, appSecret)
+	m, e := token.ParseToken(userToken, appSecret)
 	if e != nil {
 		fmt.Println("parse token error! ", e)
 	}
-	appidFromToken := claims.(jwt.MapClaims)[token.JWT_TOKEN_APPID]
-	uidFromToken := claims.(jwt.MapClaims)[token.JWT_TOKEN_UID]
-	expFromToken := claims.(jwt.MapClaims)[token.JWT_TOKEN_EXP]
+	appidFromToken := m[token.JWT_TOKEN_APPID].(string)
+	uidFromToken := m[token.JWT_TOKEN_UID].(string)
+	expFromToken := m[token.JWT_TOKEN_EXP].(float64)
 	fmt.Printf("parse token ok.\nappid : %s ,uid %s ,exp %f.\n", appidFromToken, uidFromToken, expFromToken)
 }
